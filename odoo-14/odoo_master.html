@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style type="text/css">
+    .dropdown-menu>li>a:hover{
+        background-color: #3e3e3e;
+    }
+    a{
+        text-decoration: none;
+    }
+    *{
+        color: white;
+        line-height: 30px;
+        background-color: #3e3e3e;
+    }
+</style>    
+</head>
+
+<body>
+
+    <!-- nav -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar scroll</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                         odoo-14
+                        </a>
+                        <ul class="dropdown-menu bg-dark" aria-labelledby="navbarScrollingDropdown">
+                             <li>
+                                <a class="dropdown-item text-light" href="#install">Installation</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-light" href="#14_window_action">window-action</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-light" href="#views">views</a>
+
+                            </li>  
+                              <li>
+                                <a class="dropdown-item text-light" href="#other">Other</a>
+
+                            </li>  
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- nav-end -->
+     <div class=""  id="install">
+             <h5 class="ms-5 text-decoration-underline"><ul>Installation odoo </ul></h5>
+            <ul class="ms-5 " type="none">
+                <li>
+                    <p>- python3 -m pip -r requirements.txt     <span>or</span></p>
+                    <p>- pip3 install -r dir/requirements.txt</p>
+                    <p class="text-break">- pip3 install PyPDF2 <b>&</b> pypiwin32 <b>&</b> passlib <b>&</b> babel<b>&&nbsp;</b>
+                        wertzeug<b>&&nbsp;</b>lxml<b>&&nbsp;</b>decorator<b>&&nbsp;</b>polib<b>&&nbsp;</b>Pill<i>for</i>Pillow<b>&&nbsp;</b>psycopg2<b>&&nbsp;</b>idna<b>&&nbsp;</b>python-dateutil<b>&&nbsp;</b>psutil<b>&&nbsp;</b>requests<b>&&nbsp;</b>jinja2<b>&&nbsp;</b>werkzeug==0.16.1<b>&&nbsp;</b>reportlab<b>&&nbsp;</b>html2text<b>&&nbsp;</b>doctils<b>&&nbsp;</b>libsass<b>&&nbsp;</b>qrcode
+                     </p>
+                </li>
+            </ul>
+    </div>
+
+    <div class="mt-1 "  id="14_window_action">
+             <h5 class="ms-5 text-decoration-underline"><ul>Window Action </ul></h5>
+
+            <xmp>
+                <record id="" model="ir.actions.act_window">
+                    <field name="name">...</field>
+                    <field name="res_model">model_name</field>
+                    <field name="type">ir.actions.act_window</field>
+                    <field name="view_type">form</field> <= invalid field for odoo 14
+                    <field name="view_mode">tree,form,kanban,search</field>
+                    <field name="domain">[('cash_type', '=', 'receive')]</field>
+                    <field name="context">{'default_cash_type':'pay','search_default_':1}</field>
+                    <field name="view_id" ref=""/>
+                    <field name="help">Something</field>
+                    <field name="help" type="html">
+                        <p>sss</p>
+                    </field>
+                </record>
+           </xmp>        
+    </div>
+  <!-- view -->
+    <div class="mt-1" id="views">
+        <h5 class="ms-5">Inherit View</h5>
+        <xmp>
+            <record id="view_lab_requests_form_inherit_to_payment" model="ir.ui.view">
+                <field name="name">lab.requests.inherit</field>
+                <field name="model">lab.requests</field>
+                <field name="inherit_id" ref="lab_center.view_lab_requests_form"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//button[@name='generate_qr']" position="after">              
+                        <button name="action_register_payment_wizard" string="Register Payment" type="object" attrs="{'invisible':[('amount_residual', '=',0.0)]}" class="oe_highlight"/>
+                    </xpath>
+                    <xpath expr="//field[@name='list_grand_total']" position="after">              
+                        <field name="amount_residual" class="oe_subtotal_footer_separator" widget='monetary'/>
+                    </xpath>
+
+                    <xpath expr="//form/sheet/group/group/field[@name='ref_no']" position="replace">
+                    <field name="ref_no" required="1"/>
+                    </xpath>
+
+                    <xpath expr="//form/sheet/group/group/field[@name='ref_no']" position="attributes">
+                        <attribute name="required">1</attribute>
+                    </xpath>
+
+                    <xpath expr="//page[2]" position="after">              
+                        <page string="Payment History" >
+                            <field name="payment_line_id" nolabel="1" readonly="1">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="field_name" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </xpath>       
+                </field>
+            </record>
+        </xmp>
+         <hr class="ms-5" width="80%"/>
+        <h5 class="ms-5">Search View</h5>
+        <xmp>
+            <record id="view_cashbook_search" model="ir.ui.view">
+                <field name="name">cashbook.search</field>
+                <field name="model">lab.requests.payment.wizard</field>
+                <field name="arch" type="xml">
+                    <search string="Filter">
+                        <field name="name" />
+                        <field name="ref_no" />
+                        <field name="cash_type" />
+                        <field name="payment_date" />
+                        <field name="currency_id" />
+                        <field name="lab_request_id" />
+                        <group expand="0" string="Group By">
+                            <filter name="cash" string="Cash Type"  context="{'group_by':'cash_type'}"/>
+                            <filter name="state" string="Status"  context="{'group_by':'state'}"/>
+                            <filter string="Payment" name="payment_type" domain="[('cash_type','=','pay')]"/> 
+                            <filter string="Receive" name="receive_type" domain="[('cash_type','=','receive')]"/>
+                            <filter string="Lab Request" name="lab_request_id" context="{'group_by':'lab_request_id'}"/>
+                        </group>
+                    </search>
+                </field>
+            </record>
+        </xmp>
+          <hr class="ms-5" width="80%"/>
+        <h5 class="ms-5">Form View</h5>
+        <xmp>
+            <record id="view_cashbook_form" model="ir.ui.view">
+                <field name="name">cashbook.form</field>
+                <field name="model">lab.requests.payment.wizard</field>
+                <field name="arch" type="xml">
+                    <form string="Cash Book">
+                        <header>
+                            <button name="action_validate" string ="Validate" type="object"
+                                class="oe_highlight" attrs="{'invisible':[('state','=','done')]}"/>
+
+                            <!-- #20211208, hwa,start -->
+                            <button name="reset_payment" string ="Reset" type="object"
+                                    class="oe_highlight" attrs="{'invisible':[('state','!=','done')]}"
+                                    confirm="When Reset, journal entries will be removed and this form will be back to Draft state."/>
+                            <!-- #20211208, hwa,end -->        
+
+                            <field name="state" widget="statusbar"/>    
+                        </header>
+
+                        <sheet>
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name" placeholder="Name" style="width:50%" class="oe_read_only"/>
+                                </h1>
+                            </div>
+                            <group>
+                                <group>
+                                    <field name="ref_no"/>
+                                    <field name="cash_type" invisible="1"/>
+                                    <!-- #20211208 han,start -->
+                                    <field name="book_type_id"/>
+                                    <field name="cost_id"/>
+                                    <!-- #20211208 han,start -->
+                                </group>
+                                <group>
+                                    <field name="payment_date" />
+                                    <field name="currency_id" required="1" widget="selection"/>
+                                    <field name="amount" required="1" widget="monetary"/>
+                                </group>
+                            </group>
+                            <label for="note" string="Notes" />
+                            <field name="note" nolabel="1" />
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </form>
+                </field>
+            </record>
+        </xmp>
+        <hr class="ms-5" width="80%"/>
+        <h5 class="ms-5">Tree View</h5>
+        <xmp>
+        <record id="view_cashbook_tree" model="ir.ui.view">
+            <field name="name">cashbook.tree</field>
+            <field name="model">lab.requests.payment.wizard</field>
+            <field name="arch" type="xml">
+                <tree string="Cash Book List" >
+                    <field name="name" />
+                    <field name="ref_no" />
+                     <!-- #20211208, hwa,start-->
+                    <field name="cost_id" />  
+                    <field name="book_type_id"/>
+                     <!-- #20211208, hwa,start-->
+                    <field name="payment_date" />
+                    <field name="currency_id" />
+                    <field name="amount" widget="monetary" sum="Total"/>
+                    <field name="state" widget="badge" optional="show" decoration-primary="state!='done'" decoration-success="state=='done'"/>
+                </tree>
+            </field>
+        </record>
+        </xmp> <hr class="ms-5" width="80%"/>
+        <h5 class="ms-5">Kanban View</h5>
+        <xmp>
+            <record id="kanban_view_lab_patient" model="ir.ui.view">
+               <field name="name">patient.kanban</field>
+               <field name="model">lab.patient</field>
+               <field name="priority">10</field>
+               <field name="arch" type="xml">
+                   <kanban>
+                       <field name="id"/>
+                       <templates>
+                           <t t-name="kanban-box">
+                           <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                               <field name="person_img" widget="image" class="o_kanban_image_fill_left"/>
+
+                                <div class="oe_kanban_details">
+                                   <div class="o_kanban_record_top">
+                                       <div class="o_kanban_record_headings">
+                                           <strong class="o_kanban_record_title">
+                                                <h3><field name="name"/></h3>
+                                           </strong>
+                                       </div>
+                                   </div>
+                                   <ul>
+                                       <li t-if="record.number.raw_value" class="o_text_overflow"><field name="number" /></li>
+                                       <li t-if="record.birthday.raw_value"><span>Birthday: </span><field name="birthday" /></li>
+                                       <li t-if="record.gender.raw_value"><field name="gender" /></li>
+                                       <li t-if="record.email.raw_value"><field name="email" /></li>
+                                       <li t-if="record.phone.raw_value" class="o_force_ltr"><field name="phone" /></li>
+                                   </ul>
+                               </div>
+                           </div>
+                           </t>
+                       </templates>
+                   </kanban>
+                </field>
+            </record>
+        </xmp>
+    </div> 
+  <!-- view -end -->
+    <div class="" id="other">
+        <p> ==> options="{'no_create': True, 'no_create_edit':True, 'no_open':True}</p>
+        <p>==>   options='{"size": [150, 150]}'</p>
+        <p>==>  attrs="{'readonly':[('done','!=',True)]}"</p>
+        <p>==>  attrs="{'invisible':[('state','!=','done')]}</p>
+        <p>==>  confirm="Are you sure want to reset!"</p>
+        <p>==> decoration-success="state==('done')" decoration-warning="state==('draft')"</p>
+        <p>==> &lt;field name"context"&gt;{'default_ot':1,'default_od':0,'search_default_ot':1} &lt;/field&gt;</p>
+    </div>
+<!-- view-end -->
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
+
+</html>
