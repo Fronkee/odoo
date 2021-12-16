@@ -52,6 +52,10 @@
                                 <a class="dropdown-item text-light" href="#other">Other</a>
 
                             </li>  
+                            <li>
+                                <a class="dropdown-item text-light" href="#create groups">Other</a>
+
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -276,6 +280,57 @@
         <p>==> decoration-success="state==('done')" decoration-warning="state==('draft')"</p>
         <p>==> &lt;field name"context"&gt;{'default_ot':1,'default_od':0,'search_default_ot':1} &lt;/field&gt;</p>
     </div>
+    <div class="groups" id="#groups">
+        <xmp class="">
+        <data noupdate="0">  
+            <record id="group_cashbook" model="res.groups">
+                <field name="name">Cashbook</field>
+                <field name="category_id" ref="lab_center.module_cashbook_center"/>
+            </record>
+
+            <record id="group_lab_referer" model="res.groups">
+                <field name="name">Lab Referer</field>
+                <field name="category_id" ref="lab_center.module_patient_refer_center"/>
+            </record>
+
+            <record id="group_lab_patient" model="res.groups">
+                <field name="name">Lab Patient</field>
+                <field name="category_id" ref="lab_center.module_patient_refer_center"/>
+            </record>
+
+            <record id="group_lab_request" model="res.groups">
+              <field name="name">Lab Request</field>
+              <field name="category_id" ref="lab_center.module_category_lab_center"/>
+              <field name="implied_ids" eval="[(4,ref('lab_center.group_lab_patient')),
+                                               (4,ref('lab_center.group_lab_referer'))]"/>
+            </record>
+
+            <record id="group_lab_test" model="res.groups">                                
+              <field name="name">Lab Test</field>                                
+              <field name="category_id" ref="lab_center.module_category_lab_center"/>
+              <field name="implied_ids" eval="[(4, ref('lab_center.group_lab_request'))]"/>
+            </record>
+
+            <record  id="module_category_lab_center" model="ir.module.category" >                             
+              <field name="name">Lab Center Access</field>                                
+              <field name="description">Lab Center Group.</field>
+              <field name="sequence">20</field>                            
+            </record>
+
+            <record id="module_patient_refer_center" model="ir.module.category">
+                <field name="name">Lab Patient and Referer Access</field>
+                <field name="description">Patient and Referer</field>
+                <field name="sequence">21</field>
+            </record>
+
+            <record id="module_cashbook_center" model="ir.module.category">
+               <field name="name">Cashbook Access</field>
+               <field name="description">Cashbook Access</field>
+               <field name="sequence">25</field>
+            </record>  
+
+        </xmp>
+    </div>    
 <!-- view-end -->
 
 
